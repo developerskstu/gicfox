@@ -1,5 +1,5 @@
 pytz
-pyrogram==1.4.16
+pyrogram
 Dnspython
 pyromod==1.5
 TgCrypto
