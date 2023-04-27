@@ -21,32 +21,28 @@ class Bot(Client):
 
     def __init__(self):
         super().__init__(
-            name="bot_session",
+            Config.BOT_SESSION,
             api_hash=Config.API_HASH,
-            api_id=Config.APP_ID,
-            bot_token=Config.TG_BOT_TOKEN,
-            sleep_threshold=30,
-            workers=8,
+            api_id=Config.API_ID,
             plugins={
                 "root": "plugins"
-            }
+            },
+            workers=4,
+            bot_token=Config.BOT_TOKEN
         )
         self.LOGGER = LOGGER
 
     async def start(self):
         await super().start()
         usr_bot_me = await self.get_me()
-        self.set_parse_mode(ParseMode.HTML)
-        self.LOGGER(__name__).info(
-            f"@{usr_bot_me.username}  started! "
-        )
+        print(f"{usr_bot_me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on @{usr_bot_me.username}.")
+     
+        self.bot_info = usr_bot_me
+        self.set_parse_mode("html")
         self.USER, self.USER_ID = await User().start()
-        try:
-            await self.USER.send_message(usr_bot_me.username, "%session_start%")
-        except Exception:
-            print(Msg.BOT_BLOCKED_MSG)
-            sys.exit()
 
     async def stop(self, *args):
+        usr_bot_me = await self.get_me()
+        msg = f"@{usr_bot_me.username} stopped. Bye."
         await super().stop()
-        self.LOGGER(__name__).info("Bot stopped. Bye.")
+        print(msg)
