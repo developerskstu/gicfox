@@ -13,10 +13,9 @@ else:
 class User(Client):
     def __init__(self):
         super().__init__(
-            name="user_session",
-            session_string=Config.TG_USER_SESSION,
+            Config.SESSION,
             api_hash=Config.API_HASH,
-            api_id=Config.APP_ID,
+            api_id=Config.API_ID,
             workers=4
         )
         self.LOGGER = LOGGER
@@ -24,11 +23,8 @@ class User(Client):
     async def start(self):
         await super().start()
         usr_bot_me = await self.get_me()
-        self.set_parse_mode(ParseMode.HTML)
-        self.LOGGER(__name__).info(
-            f"@{usr_bot_me.username}  started!"
-        )
-        return self, usr_bot_me.id
+        print(f"Userbot Account {usr_bot_me.first_name} started")
+        return (self, usr_bot_me.id)
 
     async def stop(self, *args):
         await super().stop()
